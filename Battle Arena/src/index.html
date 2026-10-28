@@ -1,0 +1,243 @@
+// Fully New
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Arena</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+
+        /* ============================================================
+           AUTH SCREEN — restyled to match the rest of the game's dark-
+           glass / gold-accent identity (same family as the Leaderboard,
+           Main Menu and the beveled HUD-panel buttons) instead of the
+           old red gradient CTA, which didn't match anything else in the
+           UI. Every #auth-* id below is unchanged — LoginScene.js reads
+           and writes these elements directly, so only look, not markup
+           wiring, moved.
+           ============================================================ */
+
+        #auth-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 38%, #14120c 0%, #0c0c10 45%, #08080a 100%);
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        #auth-overlay.visible { display: flex; }
+
+        /* Slowly drifting blurred gold/amber orbs behind the card — the
+           same "living background" technique used on the Leaderboard
+           and Game Over screens (see ui/overlays.css's .ambient-glow),
+           reused here as static markup since this page has no scene
+           lifecycle to toggle it from JS. */
+        .auth-ambient-orb {
+            position: absolute;
+            top: 0; left: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(70px);
+            mix-blend-mode: screen;
+            pointer-events: none;
+            animation: authOrbDrift ease-in-out infinite;
+        }
+        @keyframes authOrbDrift {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            50%  { transform: translate(calc(-50% + 6vw), calc(-50% - 5vh)) scale(1.18); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        #auth-box {
+            position: relative;
+            width: 360px;
+            padding: 36px 32px 30px;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,.04) 0%, transparent 16%),
+                linear-gradient(160deg, rgba(20,18,14,.92), rgba(8,8,10,.96));
+            border: 1px solid rgba(255,204,0,.22);
+            border-radius: 16px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.4), 0 30px 80px rgba(0,0,0,.65);
+            animation: authBoxIn .5s ease-out;
+        }
+        @keyframes authBoxIn {
+            from { opacity: 0; transform: translateY(10px) scale(.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #auth-box::before {
+            content: '';
+            position: absolute;
+            inset: -40px;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(42px);
+            background: radial-gradient(circle at 30% 0%, rgba(255,204,0,.22), transparent 60%),
+                        radial-gradient(circle at 90% 100%, rgba(255,140,60,.16), transparent 65%);
+        }
+
+        #auth-title {
+            position: relative;
+            color: #ffffff;
+            font-family: Impact, sans-serif;
+            font-size: 32px;
+            text-align: center;
+            margin: 0 0 6px 0;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 16px rgba(255,204,0,.45), 0 3px 10px rgba(0,0,0,.8);
+        }
+        #auth-title::before { content: '⛩'; color: #ffcc00; margin-right: 8px; filter: drop-shadow(0 0 8px rgba(255,204,0,.75)); }
+        #auth-title::after {
+            content: '';
+            display: block;
+            width: 70%;
+            height: 2px;
+            margin: 14px auto 22px;
+            background: linear-gradient(to right, transparent, #ffcc00, transparent);
+            box-shadow: 0 0 10px 1px rgba(255,204,0,.55);
+        }
+
+        .auth-input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            margin-bottom: 14px;
+            font-size: 15px;
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 9px;
+            color: #fff;
+            outline: none;
+            transition: border-color .15s, box-shadow .15s, background .15s;
+        }
+        .auth-input::placeholder { color: #888; }
+
+        .auth-input:focus {
+            border-color: #ffcc00;
+            background: rgba(255,255,255,.08);
+            box-shadow: 0 0 14px rgba(255,204,0,.3);
+        }
+
+        /* Same beveled-HUD-panel language as the Main Menu / Pause
+           buttons (hairline border, layered bevel, clipped corners, a
+           lit corner tag and a diagonal shine sweep on hover) — but
+           self-contained here, since LoginScene.js sets this button's
+           textContent directly (Please wait... / CREATE ACCOUNT /
+           ENTER ARENA), which would wipe out any child <span> tag/label
+           elements the Menu screens use. Everything below is done with
+           ::before/::after instead, so relabeling from JS never breaks it. */
+        #auth-submit {
+            position: relative;
+            width: 100%;
+            margin-top: 4px;
+            padding: 14px 22px 14px 30px;
+            font-family: Impact, sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #e8e8e8;
+            border: 1px solid rgba(255,255,255,.16);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 14%),
+                linear-gradient(135deg, rgba(28,26,18,.7), rgba(10,10,10,.7));
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+            cursor: pointer;
+            overflow: hidden;
+            transition: color .15s, border-color .2s, background .2s, transform .12s;
+        }
+
+        /* Corner tag, dim at rest, lit on hover — same idea as .menu-btn-tag */
+        #auth-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 14px; height: 14px;
+            background: #ffcc00;
+            opacity: .45;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            transition: opacity .2s;
+        }
+
+        /* Diagonal shine sweep on hover */
+        #auth-submit::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.16) 50%, transparent 65%);
+            transform: translateX(-130%);
+            transition: transform .5s ease;
+        }
+
+        #auth-submit:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 12px rgba(255,204,0,.5);
+            border-color: #ffcc00;
+            background: linear-gradient(135deg, rgba(38,34,20,.8), rgba(14,14,14,.8));
+            transform: translateY(-1px);
+        }
+        #auth-submit:hover::before { transform: translateX(130%); }
+        #auth-submit:hover::after { opacity: 1; }
+        #auth-submit:active { transform: translateY(0) scale(.99); }
+
+        #auth-submit:disabled {
+            color: #777;
+            border-color: rgba(255,255,255,.08);
+            background: linear-gradient(135deg, rgba(20,20,20,.6), rgba(10,10,10,.6));
+            cursor: default;
+            transform: none;
+        }
+        #auth-submit:disabled::after { opacity: .15; }
+
+        #auth-toggle {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: #76d7ff;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color .15s;
+        }
+        #auth-toggle:hover { color: #a8e2ff; text-decoration: underline; }
+
+        #auth-error {
+            color: #ff7b7b;
+            font-size: 13px;
+            text-align: center;
+            min-height: 18px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px rgba(255,123,123,.4);
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-overlay">
+        <div class="auth-ambient-orb" style="top:12%; left:10%; width:42vw; height:42vw; background:radial-gradient(circle, rgba(255,204,0,.42), transparent 70%); animation-duration:18s;"></div>
+        <div class="auth-ambient-orb" style="top:70%; left:88%; width:34vw; height:34vw; background:radial-gradient(circle, rgba(255,140,60,.32), transparent 70%); animation-duration:22s; animation-delay:-7s;"></div>
+        <div class="auth-ambient-orb" style="top:85%; left:16%; width:28vw; height:28vw; background:radial-gradient(circle, rgba(120,170,255,.22), transparent 70%); animation-duration:15s; animation-delay:-3s;"></div>
+
+        <div id="auth-box">
+            <h2 id="auth-title">LOGIN</h2>
+            <div id="auth-error"></div>
+            <input id="auth-username" class="auth-input" type="text" placeholder="Username" autocomplete="username">
+            <input id="auth-email" class="auth-input" type="email" placeholder="Email" autocomplete="email" style="display:none">
+            <input id="auth-password" class="auth-input" type="password" placeholder="Password" autocomplete="current-password">
+            <button id="auth-submit">ENTER ARENA</button>
+            <button id="auth-toggle">No account? Register</button>
+        </div>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>

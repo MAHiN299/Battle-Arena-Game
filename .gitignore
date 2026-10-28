@@ -1,0 +1,13 @@
+
+node_modules/
+.parcel-cache/
+dist/
+.env
+.env.*
+!.env.example
+.cache/
+target/
+.idea/
+*.class
+.cp.txt
+temp/

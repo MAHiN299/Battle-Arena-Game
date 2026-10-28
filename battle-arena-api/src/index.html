@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Arena</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+
+        #auth-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            font-family: Impact, Arial, sans-serif;
+        }
+
+        #auth-overlay.visible { display: flex; }
+
+        #auth-box {
+            width: 360px;
+            padding: 32px;
+            background: #1a1a1a;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+        }
+
+        #auth-title {
+            color: #ffffff;
+            font-size: 32px;
+            text-align: center;
+            margin: 0 0 24px 0;
+            letter-spacing: 2px;
+        }
+
+        .auth-input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 14px;
+            font-size: 16px;
+            background: #2a2a2a;
+            border: 1px solid #555;
+            color: #fff;
+            outline: none;
+        }
+
+        .auth-input:focus { border-color: #8cff9b; }
+
+        #auth-submit {
+            width: 100%;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: bold;
+            background: #8cff9b;
+            border: none;
+            color: #111;
+            cursor: pointer;
+        }
+
+        #auth-submit:hover { background: #a6ffb2; }
+        #auth-submit:disabled { background: #555; color: #999; cursor: default; }
+
+        #auth-toggle {
+            display: block;
+            width: 100%;
+            margin-top: 14px;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: #76d7ff;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #auth-error {
+            color: #ff7b7b;
+            font-size: 14px;
+            text-align: center;
+            min-height: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-overlay">
+        <div id="auth-box">
+            <h2 id="auth-title">LOGIN</h2>
+            <div id="auth-error"></div>
+            <input id="auth-username" class="auth-input" type="text" placeholder="Username" autocomplete="username">
+            <input id="auth-email" class="auth-input" type="email" placeholder="Email" autocomplete="email" style="display:none">
+            <input id="auth-password" class="auth-input" type="password" placeholder="Password" autocomplete="current-password">
+            <button id="auth-submit">ENTER ARENA</button>
+            <button id="auth-toggle">No account? Register</button>
+        </div>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>

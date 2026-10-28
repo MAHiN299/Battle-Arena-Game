@@ -1,0 +1,2786 @@
+/* ============================================================
+   Shared CSS for the DOM-based overlays that sit on top of the
+   Phaser canvas: the Friends screen and the direct-invite popup.
+   Kept in its own stylesheet (imported once from main.js) rather
+   than inline styles, so it's one place to restyle both.
+   ============================================================ */
+
+/* ---------- Friends screen ---------- */
+
+#friends-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(0, 0, 0, 0.55);
+    align-items: center;
+    justify-content: center;
+    font-family: Impact, Arial, sans-serif;
+}
+
+#friends-overlay.visible { display: flex; }
+
+#friends-panel {
+    width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 26px 28px;
+    background: #101014;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+}
+
+#friends-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+#friends-header h2 {
+    color: #ffffff;
+    font-size: 26px;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+#friends-back {
+    background: none;
+    border: none;
+    color: #76d7ff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#friends-search-row { margin-bottom: 6px; }
+
+#friends-search-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    background: #1c1c22;
+    border: 1px solid #444455;
+    color: #fff;
+    outline: none;
+}
+
+#friends-search-input:focus { border-color: #8cff9b; }
+
+#friends-search-results {
+    margin-bottom: 14px;
+    min-height: 0;
+}
+
+#friends-flash {
+    min-height: 18px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    transition: opacity 0.4s;
+}
+
+.friends-section-title {
+    color: #ffcc00;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin: 14px 0 8px 0;
+}
+
+.friends-empty {
+    color: #666677;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    padding: 4px 0;
+}
+
+.friend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 6px;
+    border-bottom: 1px solid #1e1e26;
+    font-family: Arial, sans-serif;
+}
+
+.friend-row .online-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #555566;
+    flex: 0 0 auto;
+}
+
+.friend-row .online-dot.online { background: #44ff88; }
+
+.friend-row .friend-name {
+    color: #ffffff;
+    font-size: 15px;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friend-row .friend-name.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+}
+.friend-row .friend-name.clickable:hover { text-decoration-color: #76d7ff; }
+
+.friend-row .new-tag {
+    background: #e63946;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 3px;
+    flex: 0 0 auto;
+}
+
+.friend-row .pending-label {
+    color: #888888;
+    font-size: 12px;
+    flex: 0 0 auto;
+}
+
+.friend-action-btn {
+    border: none;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.friend-action-btn:disabled { cursor: default; opacity: 0.6; }
+
+.friend-action-btn.add     { background: #224a2a; color: #8cff9b; }
+.friend-action-btn.invite  { background: #274a63; color: #76d7ff; }
+.friend-action-btn.message { background: #23384a; color: #76d7ff; }
+.friend-action-btn.remove  { background: #4a2323; color: #ff7b7b; }
+.friend-action-btn.accept  { background: #224a2a; color: #8cff9b; }
+.friend-action-btn.decline { background: #4a2323; color: #ff7b7b; }
+
+/* ---------- Profile screen ----------
+   Adapted from the user-supplied template, scoped entirely under
+   #profile-overlay so none of these (deliberately generic) class
+   names — .card, .grid, .section — leak into Friends or anywhere
+   else. Real background photo behind translucent panels, per the
+   supplied image, replacing the template's CSS-gradient backdrop. */
+
+#profile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    color: #eef7ff;
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#profile-overlay.visible { display: flex; }
+
+#profile-overlay .bg-photo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+#profile-overlay .bg-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        linear-gradient(180deg, rgba(4,12,26,.55) 0%, rgba(4,12,26,.88) 55%, rgba(4,12,26,.97) 100%);
+}
+
+#profile-overlay .topbar,
+#profile-overlay .layout {
+    position: relative;
+    z-index: 2;
+}
+
+#profile-overlay .topbar {
+    height: 76px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    border-bottom: 1px solid rgba(120,190,255,.22);
+    background: rgba(4,16,34,.55);
+    backdrop-filter: blur(10px);
+}
+
+#profile-overlay .brand {
+    font-family: Impact, sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    font-style: italic;
+    text-shadow: 0 0 22px rgba(84,220,255,.35);
+}
+#profile-overlay .brand span { color: #54dcff; }
+
+#profile-overlay #profile-back {
+    border: 1px solid rgba(84,220,255,.35);
+    color: #fff;
+    background: rgba(15,55,100,.55);
+    border-radius: 24px;
+    padding: 10px 19px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    transition: .2s;
+}
+#profile-overlay #profile-back:hover { background: #1160a9; }
+
+#profile-overlay .layout {
+    display: grid;
+    grid-template-columns: 210px minmax(0,1fr);
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#profile-overlay .sidebar {
+    padding: 26px 12px;
+    border-right: 1px solid rgba(108,176,255,.22);
+    background: rgba(3,18,38,.45);
+    backdrop-filter: blur(8px);
+    overflow-y: auto;
+}
+
+#profile-overlay .nav-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #a9bfd9;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 15px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    transition: .2s;
+}
+#profile-overlay .nav-item:hover { color: #fff; background: rgba(51,133,226,.15); }
+#profile-overlay .nav-item.active {
+    color: #fff;
+    background: linear-gradient(90deg,#0965d6,#124c9c);
+    box-shadow: 0 8px 24px rgba(0,116,255,.25);
+}
+#profile-overlay .nav-item .icon { font-size: 18px; width: 22px; text-align: center; }
+
+#profile-overlay .content {
+    padding: 24px 28px 40px;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    overflow-y: auto;
+}
+
+#profile-flash {
+    min-height: 18px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: opacity 0.4s;
+}
+
+#profile-overlay .grid {
+    display: grid;
+    grid-template-columns: 340px minmax(0,1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+#profile-overlay .card {
+    border: 1px solid rgba(108,176,255,.22);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(11,34,67,.88), rgba(7,19,40,.82));
+    box-shadow: 0 18px 45px rgba(0,0,0,.25), inset 0 1px rgba(255,255,255,.05);
+}
+
+#profile-overlay .profile-card {
+    position: relative;
+    text-align: center;
+    padding: 30px 22px 22px;
+    background:
+        linear-gradient(180deg, rgba(9,42,82,.30), rgba(7,17,37,.94)),
+        radial-gradient(circle at 50% 15%, rgba(75,190,255,.35), transparent 30%);
+}
+
+#profile-overlay .avatar {
+    position: relative;
+    width: 108px; height: 108px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: Impact, sans-serif;
+    font-size: 46px; font-weight: 900;
+    color: #54dcff;
+    background: radial-gradient(circle, #16365b, #07182e);
+    border: 3px solid #55d9ff;
+    box-shadow: 0 0 0 7px rgba(72,174,255,.10), 0 0 36px rgba(38,189,255,.35);
+}
+
+#profile-overlay .avatar .online-dot {
+    position: absolute;
+    bottom: 2px; right: 2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #555566;
+    border: 3px solid #07182e;
+}
+#profile-overlay .avatar .online-dot.online { background: #53e6b0; }
+
+#profile-overlay .username { font-family: Impact, sans-serif; font-size: 27px; font-weight: 900; }
+#profile-overlay .sub { font-family: Arial, sans-serif; color: #91a9c6; font-size: 12px; margin-top: 4px; }
+#profile-overlay .date { font-family: Arial, sans-serif; color: #a8c1de; margin: 12px 0; font-size: 13px; }
+
+#profile-overlay .level-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 14px;
+}
+
+#profile-overlay .level-badge {
+    display: inline-flex; align-items: center;
+    font-family: Impact, sans-serif;
+    color: #76d7ff; font-size: 14px; font-weight: 900;
+    letter-spacing: .5px;
+    padding: 3px 14px; border-radius: 20px;
+    border: 1px solid rgba(118,215,255,.45);
+    background: rgba(20,60,90,.28);
+}
+
+#profile-overlay .xp-bar {
+    width: 100%;
+    max-width: 220px;
+    height: 8px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(118,215,255,.18);
+    overflow: hidden;
+}
+
+#profile-overlay .xp-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #3aa8e0, #76d7ff);
+}
+
+#profile-overlay .xp-label {
+    font-family: Arial, sans-serif;
+    color: #7fa7c8; font-size: 11px; font-weight: bold;
+}
+
+#profile-overlay .coins {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: Impact, sans-serif;
+    color: #ffd34c; font-size: 20px; font-weight: 900;
+    padding: 7px 20px; border-radius: 30px;
+    border: 1px solid rgba(255,199,44,.45);
+    background: rgba(100,69,0,.22);
+}
+
+#profile-overlay .rank {
+    margin-top: 13px;
+    color: #ffd34c;
+    font-family: Arial, sans-serif;
+    font-size: 15px; font-weight: 800;
+}
+
+#profile-overlay .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 16px;
+}
+#profile-overlay .profile-actions button {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 14px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+#profile-overlay .profile-actions button:disabled { cursor: default; opacity: .55; }
+#profile-overlay .profile-add-btn     { background: #224a2a; color: #8cff9b; }
+#profile-overlay .profile-message-btn { background: #23384a; color: #76d7ff; }
+
+#profile-overlay .stat-stack { display: grid; gap: 12px; margin-top: 18px; }
+
+#profile-overlay .stat {
+    min-height: 82px;
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 16px;
+    font-family: Arial, sans-serif;
+}
+#profile-overlay .stat-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 22px;
+    border: 1px solid currentColor;
+    background: rgba(0,0,0,.16);
+    flex: 0 0 auto;
+}
+#profile-overlay .cyan  { color: #57dcff; }
+#profile-overlay .green { color: #53e6b0; }
+#profile-overlay .red   { color: #ff5877; }
+#profile-overlay .stat-number { font-family: Impact, sans-serif; font-size: 25px; font-weight: 900; }
+#profile-overlay .stat-label { color: #9bb1cb; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+
+#profile-overlay .right { display: grid; gap: 20px; min-width: 0; }
+#profile-overlay .section { padding: 18px; }
+
+#profile-overlay .section-title {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 13px;
+    font-family: Arial, sans-serif;
+}
+#profile-overlay .title-left { display: flex; align-items: center; gap: 10px; }
+#profile-overlay .title-left h2 {
+    font-family: Impact, sans-serif;
+    font-size: 19px; letter-spacing: .5px; margin: 0;
+}
+#profile-overlay .section-icon { font-size: 22px; color: #ffc72c; }
+
+/* Small live-update pulse next to Match History when a new result
+   just arrived over the WebSocket */
+#profile-overlay .live-dot {
+    display: inline-block;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #53e6b0;
+    opacity: 0;
+    transition: opacity .3s;
+}
+#profile-overlay .live-dot.pulse { opacity: 1; }
+
+#profile-overlay .achievements {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+@media (max-width: 1150px) {
+    #profile-overlay .achievements { grid-template-columns: repeat(2, 1fr); }
+}
+
+#profile-overlay .achievement {
+    min-height: 66px;
+    padding: 11px;
+    display: flex; align-items: center; gap: 11px;
+    border: 1px solid rgba(102,163,220,.22);
+    border-radius: 9px;
+    background: rgba(5,18,38,.55);
+    font-family: Arial, sans-serif;
+    transition: .2s;
+}
+#profile-overlay .achievement.active { border-color: #ffc72c; box-shadow: inset 0 0 20px rgba(255,199,44,.06); }
+#profile-overlay .achievement.locked { opacity: .45; filter: saturate(.4); }
+#profile-overlay .achievement.clickable { cursor: pointer; }
+#profile-overlay .achievement.clickable:hover { border-color: #3eaee8; }
+
+#profile-overlay .badge {
+    width: 41px; height: 41px; min-width: 41px;
+    display: grid; place-items: center;
+    border-radius: 50%; font-size: 19px;
+    border: 1px solid rgba(255,199,44,.5);
+    background: rgba(130,91,0,.18);
+    color: #ffd34c;
+    flex: 0 0 auto;
+}
+#profile-overlay .achievement.locked .badge { color: #6a7a8c; border-color: rgba(255,255,255,.15); background: rgba(0,0,0,.2); }
+#profile-overlay .achievement strong { display: block; font-size: 13px; }
+#profile-overlay .achievement small { display: block; color: #8da8c3; margin-top: 3px; font-size: 10px; }
+
+#profile-overlay .rows { display: grid; gap: 4px; }
+
+#profile-overlay .match {
+    min-height: 40px;
+    display: grid;
+    grid-template-columns: 1fr 78px 66px 70px 60px 120px;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-left: 4px solid #ff5475;
+    border-radius: 2px;
+    background: rgba(5,16,34,.55);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    transition: .15s;
+}
+#profile-overlay .match.victory { border-left-color: #53e6b0; }
+#profile-overlay .match:hover { background: rgba(31,76,130,.35); }
+
+#profile-overlay .match .match-map { color: #fff; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#profile-overlay .match .defeat { color: #ff6b86; }
+#profile-overlay .match .victory-text { color: #53e6b0; }
+#profile-overlay .match .muted { color: #8fa8c3; }
+#profile-overlay .match .pill {
+    justify-self: start;
+    padding: 3px 9px; border-radius: 20px;
+    font-size: 9px; font-weight: 900;
+}
+#profile-overlay .match .pill.defeat-pill { background: rgba(255,73,108,.20); color: #ff6983; }
+#profile-overlay .match .pill.victory-pill { background: rgba(83,230,176,.20); color: #53e6b0; }
+#profile-overlay .match .match-replay-btn {
+    justify-self: start;
+    background: #274a63; color: #76d7ff; border: none; border-radius: 10px;
+    font-size: 10px; font-weight: bold; padding: 4px 9px; cursor: pointer;
+}
+
+#profile-overlay .view {
+    color: #54dcff;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#profile-overlay .friends-empty { font-family: Arial, sans-serif; color: #8fa8c3; font-size: 13px; }
+
+#profile-overlay .stats-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+@media (max-width: 1150px) {
+    #profile-overlay .stats-detail-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+    #profile-overlay .stats-detail-grid { grid-template-columns: 1fr; }
+}
+#profile-overlay .stats-detail-item {
+    padding: 13px 14px;
+    border-radius: 9px;
+    background: rgba(5,18,38,.55);
+    border: 1px solid rgba(102,163,220,.22);
+    font-family: Arial, sans-serif;
+}
+#profile-overlay .stats-detail-value {
+    font-family: Impact, sans-serif;
+    font-size: 21px;
+    font-weight: 900;
+    color: #54dcff;
+}
+#profile-overlay .stats-detail-label {
+    color: #9bb1cb;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-top: 3px;
+}
+
+/* ---------- Settings section ---------- */
+
+#profile-overlay .settings-groups { display: grid; gap: 22px; }
+
+#profile-overlay .settings-group h3 {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #a8c1de;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin: 0 0 10px;
+}
+
+#profile-overlay .settings-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+#profile-overlay .settings-input {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    background: #101a2c;
+    border: 1px solid rgba(108,176,255,.28);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+}
+#profile-overlay .settings-input:focus { border-color: #54dcff; }
+#profile-overlay .settings-input::placeholder { color: #5f7690; }
+
+#profile-overlay .settings-save-btn {
+    flex: 0 0 auto;
+    background: #23384a;
+    color: #76d7ff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+#profile-overlay .settings-save-btn:hover { background: #2b4a63; }
+#profile-overlay .settings-save-btn:disabled { opacity: .5; cursor: default; }
+
+#profile-overlay .settings-msg {
+    min-height: 16px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    margin: -2px 0 10px;
+    transition: opacity .3s;
+}
+
+#profile-overlay .settings-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+#profile-overlay .settings-slider-row label {
+    flex: 0 0 100px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #cfe0f5;
+}
+#profile-overlay .settings-slider-row input[type="range"] {
+    flex: 1;
+    accent-color: #54dcff;
+}
+#profile-overlay .settings-slider-row .settings-slider-val {
+    flex: 0 0 40px;
+    text-align: right;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #9bb1cb;
+}
+
+#profile-overlay .settings-divider {
+    border: none;
+    border-top: 1px solid rgba(108,176,255,.14);
+    margin: 0 0 18px;
+}
+
+@media (max-width: 1050px) {
+    #profile-overlay .layout { grid-template-columns: 72px 1fr; }
+    #profile-overlay .sidebar { padding: 18px 8px; }
+    #profile-overlay .nav-item { justify-content: center; padding: 13px 4px; }
+    #profile-overlay .nav-item span:not(.icon) { display: none; }
+    #profile-overlay .grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+    #profile-overlay .topbar { height: 62px; padding: 0 16px; }
+    #profile-overlay .brand { font-size: 22px; }
+    #profile-overlay .content { padding: 14px; }
+    #profile-overlay .achievements { grid-template-columns: 1fr; }
+    #profile-overlay .match { grid-template-columns: 1fr 60px 50px; }
+    #profile-overlay .match > :nth-child(4),
+    #profile-overlay .match > :nth-child(5),
+    #profile-overlay .match > :nth-child(6) { display: none; }
+}
+
+/* ---------- Direct-invite popup (global, any scene) ---------- */
+
+#invite-toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1200;
+    width: 300px;
+    padding: 16px 18px;
+    background: #101014;
+    border: 2px solid #76d7ff;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
+    font-family: Arial, sans-serif;
+}
+
+#invite-toast.visible { display: block; }
+
+#invite-toast-title {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+#invite-toast-actions { display: flex; gap: 10px; }
+
+#invite-toast-actions button {
+    flex: 1 1 auto;
+    border: none;
+    padding: 9px 0;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#invite-toast-accept  { background: #224a2a; color: #8cff9b; }
+#invite-toast-decline { background: #4a2323; color: #ff7b7b; }
+
+#invite-info-toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1200;
+    padding: 12px 16px;
+    background: #101014;
+    border: 2px solid #555566;
+    color: #cccccc;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+#invite-info-toast.visible { display: block; }
+
+/* ---------- Shop screen ---------- */
+/* Background art + two chrome variants (Fighters = left side-nav,
+   Supplies = top tab bar) matching the supplied reference designs. */
+
+#shop-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    color: #f2f6ff;
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    flex-direction: column;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#shop-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(6,8,14,.55) 0%, rgba(6,8,14,.35) 30%, rgba(4,6,10,.65) 100%);
+    pointer-events: none;
+}
+#shop-overlay.visible { display: flex; }
+#shop-overlay > * { position: relative; z-index: 1; }
+
+/* ---- shared bits: coin badge, back buttons, flash/status ---- */
+
+#shop-overlay .shop-coin-badge {
+    font-family: Impact, sans-serif;
+    font-size: 20px;
+    letter-spacing: .5px;
+    color: #ffd34c;
+    background: rgba(10,14,10,.55);
+    border: 1px solid rgba(255,211,76,.55);
+    border-radius: 30px;
+    padding: 9px 26px;
+    box-shadow: 0 0 22px rgba(0,0,0,.35);
+}
+
+#shop-overlay .shop-back-arrow,
+#shop-overlay .shop-back-pill {
+    border: 1px solid rgba(120,180,255,.45);
+    color: #eaf3ff;
+    background: rgba(10,20,35,.55);
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: .5px;
+    transition: .2s;
+    backdrop-filter: blur(6px);
+}
+#shop-overlay .shop-back-arrow:hover,
+#shop-overlay .shop-back-pill:hover { background: rgba(30,60,100,.7); border-color: #7ec4ff; }
+
+#shop-flash {
+    min-height: 18px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    transition: opacity 0.4s;
+}
+
+#shop-status, .shop-status-ok, .shop-status-error {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 40px 0;
+}
+.shop-status-ok { color: #8cff9b; }
+.shop-status-error { color: #ff7b7b; }
+
+.shop-title-sub {
+    color: #cfe3ff;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    letter-spacing: .3px;
+}
+.shop-title-sub-center { text-align: center; padding: 6px 0 16px; }
+
+/* ============================================================
+   FIGHTERS TAB — grid (shares the top tab-bar shell with Supplies)
+   ============================================================ */
+
+#shop-overlay .shop-grid-fighters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.fighter-card {
+    position: relative;
+    border: 2px solid var(--accent, #8cff9b);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(8,10,16,.6);
+    box-shadow: 0 18px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.03) inset;
+    text-align: center;
+    transition: transform .15s;
+}
+.fighter-card:hover { transform: translateY(-4px); }
+.fighter-card.unaffordable { opacity: .65; }
+
+.fighter-lock {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.55);
+    border: 1px solid rgba(255,255,255,.3);
+    display: grid; place-items: center;
+    font-size: 14px;
+    z-index: 2;
+}
+
+.fighter-portrait {
+    width: 100%;
+    height: 230px;
+    background-size: cover;
+    background-position: top center;
+    position: relative;
+}
+.fighter-portrait::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(6,8,12,.92) 100%);
+}
+.fighter-portrait-fallback {
+    display: grid; place-items: center;
+    font-family: Impact, sans-serif;
+    font-size: 60px;
+    font-weight: 900;
+    color: var(--accent, #8cff9b);
+    background: radial-gradient(circle, rgba(255,255,255,.08), transparent 70%), #10141c;
+}
+
+.fighter-name {
+    font-family: Impact, sans-serif;
+    font-size: 18px;
+    letter-spacing: .5px;
+    margin-top: 12px;
+}
+
+.fighter-locked-pill {
+    display: inline-block;
+    margin: 8px auto 0;
+    color: #cfd8e6;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 14px;
+    padding: 4px 14px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.fighter-ability {
+    color: #9bb1cb;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    min-height: 30px;
+    margin: 10px 16px 0;
+}
+
+.fighter-buy-btn {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 16px auto 20px;
+    border: none;
+    border-radius: 20px;
+    padding: 11px 16px;
+    font-family: Impact, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    background: linear-gradient(90deg,#8cff9b,#53e6b0);
+    color: #08210f;
+}
+.fighter-buy-btn:disabled { opacity: .4; cursor: not-allowed; background: #2a3a2f; color: #9bb1cb; }
+
+/* ============================================================
+   SUPPLIES TAB — top tab-bar layout
+   ============================================================ */
+
+#shop-overlay .shop-header-top {
+    height: 78px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(6,10,18,.4);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.shop-brand-top {
+    font-family: Impact, sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    font-style: italic;
+    text-shadow: 0 0 22px rgba(120,200,255,.35);
+}
+.shop-brand-top span { color: #6fd7ff; }
+
+#shop-overlay .shop-tabs {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 22px 0 6px;
+}
+
+#shop-overlay .shop-tab {
+    border: 1px solid rgba(120,200,255,.35);
+    background: rgba(10,20,35,.5);
+    color: #a9c2dd;
+    border-radius: 22px;
+    padding: 10px 28px;
+    font-family: Impact, sans-serif;
+    font-size: 15px;
+    letter-spacing: .5px;
+    cursor: pointer;
+    transition: .2s;
+    backdrop-filter: blur(4px);
+}
+#shop-overlay .shop-tab:hover { color: #fff; }
+#shop-overlay .shop-tab.active {
+    color: #052430;
+    background: linear-gradient(90deg,#6fd7ff,#3bb8ff);
+    border-color: transparent;
+    box-shadow: 0 8px 22px rgba(59,184,255,.35);
+}
+
+#shop-overlay .shop-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 28px 40px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#shop-overlay .shop-grid-supplies {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+    margin: 0 auto;
+    gap: 26px;
+}
+@media (max-width: 760px) {
+    #shop-overlay .shop-grid-supplies { grid-template-columns: 1fr; }
+}
+
+.supply-card {
+    border: 1px solid rgba(120,200,255,.3);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(10,25,45,.7), rgba(5,10,20,.85));
+    box-shadow: 0 18px 40px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.05);
+    padding: 26px 20px 22px;
+    text-align: center;
+    transition: transform .15s, border-color .15s;
+}
+.supply-card:hover { transform: translateY(-3px); border-color: rgba(120,200,255,.6); }
+
+.supply-icon-img {
+    width: 128px;
+    height: 128px;
+    object-fit: contain;
+    margin: 0 auto 14px;
+    display: block;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,.5));
+}
+
+.supply-name {
+    font-family: Impact, sans-serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.supply-owned {
+    color: #a9c2dd;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.supply-trade-row {
+    display: flex;
+    gap: 10px;
+}
+.supply-buy-btn,
+.supply-sell-btn {
+    flex: 1;
+    border: none;
+    border-radius: 20px;
+    padding: 11px 10px;
+    font-family: Impact, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .2s;
+}
+.supply-buy-btn { background: linear-gradient(90deg,#4be07c,#1fa855); color: #06210e; }
+.supply-sell-btn { border: 1px solid rgba(120,200,255,.4); background: rgba(15,30,50,.7); color: #9fd8ff; }
+.supply-buy-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.supply-sell-btn:hover:not(:disabled) { background: rgba(30,55,85,.8); }
+.supply-buy-btn:disabled,
+.supply-sell-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ---------- Shop purchase-confirm modal ---------- */
+
+#shop-confirm-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,.72);
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .15s;
+}
+#shop-confirm-overlay.visible { opacity: 1; }
+
+.shop-confirm-box {
+    width: 420px;
+    padding: 28px 26px;
+    background: #101014;
+    border: 2px solid #ffcc00;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(0,0,0,.85);
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.shop-confirm-title {
+    font-family: Impact, sans-serif;
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 14px;
+}
+
+.shop-confirm-cost {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 22px;
+}
+
+.shop-confirm-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+}
+
+.shop-confirm-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 10px;
+    font-family: Impact, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+#shop-confirm-yes { background: #224a2a; color: #8cff9b; }
+#shop-confirm-no  { background: #3a2020; color: #ff7b7b; }
+
+/* ============================================================
+   IN-GAME CHAT — floating widget used during Lobby / Character
+   Select / live matches. One persistent instance (see ChatPanel.js);
+   fixed to the corner regardless of which Phaser scene is running.
+   ============================================================ */
+
+#ingame-chat-overlay {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    /* Higher than every full-screen DOM overlay (Profile/Friends/Shop/
+       DM/Lobby all use 900), so this persistent widget stays visible
+       and clickable on top of them — the Lobby's Room screen included.
+       Still below confirm modals (1000+) and the toast stack (1300). */
+    z-index: 950;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+#ingame-chat-icon {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    border: 2px solid #6688ff;
+    background: rgba(20,20,28,.92);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    position: relative;
+    display: grid; place-items: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,.45);
+    transition: transform .15s;
+}
+#ingame-chat-icon:hover { transform: scale(1.08); }
+#ingame-chat-overlay.open #ingame-chat-icon { display: none; }
+
+@keyframes ingameChatPing {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.28); }
+    100% { transform: scale(1); }
+}
+#ingame-chat-icon.ping { animation: ingameChatPing .35s ease; }
+
+.ingame-chat-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: #ff4444;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.ingame-chat-badge.visible { display: flex; }
+
+#ingame-chat-panel {
+    display: none;
+    width: 340px;
+    max-height: 68vh;
+    flex-direction: column;
+    background: rgba(13,13,18,.96);
+    border: 2px solid #333340;
+    border-radius: 12px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.5);
+    overflow: hidden;
+}
+#ingame-chat-overlay.open #ingame-chat-panel { display: flex; }
+
+.ingame-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: rgba(26,26,36,.95);
+    border-bottom: 1px solid rgba(102,136,255,.3);
+}
+.ingame-chat-title {
+    font-family: Impact, sans-serif;
+    font-size: 14px;
+    color: #8899ff;
+    letter-spacing: .5px;
+}
+#ingame-chat-close {
+    border: none;
+    background: transparent;
+    color: #888899;
+    font-size: 15px;
+    cursor: pointer;
+}
+#ingame-chat-close:hover { color: #fff; }
+
+#ingame-chat-log {
+    flex: 1 1 auto;
+    min-height: 140px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 10px 12px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ingame-chat-system {
+    text-align: center;
+    color: #666677;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.ingame-chat-row.mine { align-self: flex-end; text-align: right; }
+.ingame-chat-from {
+    font-size: 10px;
+    font-weight: bold;
+    color: #77aaff;
+    margin-bottom: 2px;
+}
+.ingame-chat-row.mine .ingame-chat-from { color: #ff9977; }
+.ingame-chat-bubble {
+    display: inline-block;
+    background: #1e2a3a;
+    color: #eeeeee;
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    max-width: 250px;
+    word-wrap: break-word;
+    text-align: left;
+}
+.ingame-chat-row.mine .ingame-chat-bubble { background: #3a2a20; }
+
+#ingame-chat-typing {
+    min-height: 16px;
+    padding: 0 12px;
+    font-size: 11px;
+    font-style: italic;
+    color: #888899;
+}
+
+.ingame-chat-quickrow,
+.ingame-chat-emojirow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 4px 10px;
+}
+
+.ingame-chat-quickbtn,
+.ingame-chat-emojibtn {
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.05);
+    border-radius: 6px;
+    padding: 3px 7px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .15s;
+}
+.ingame-chat-quickbtn:hover,
+.ingame-chat-emojibtn:hover { background: rgba(255,255,255,.14); transform: scale(1.08); }
+
+.ingame-chat-inputrow {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+#ingame-chat-input {
+    flex: 1 1 auto;
+    background: #1a1a24;
+    border: 1px solid #444455;
+    border-radius: 18px;
+    padding: 8px 14px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+#ingame-chat-input:focus { border-color: #6688ff; }
+#ingame-chat-input::placeholder { color: #555566; }
+
+#ingame-chat-send {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: #4466ff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+#ingame-chat-send:hover { background: #5577ff; }
+
+/* ============================================================
+   GLOBAL "NETWORK CHAT" — full-screen dim backdrop with a centered
+   floating panel. Toggled via the Menu's "Network Chat" button.
+   ============================================================ */
+
+#globalchat-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(0,0,0,.6);
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+#globalchat-overlay.visible { display: flex; }
+
+#globalchat-panel {
+    width: 680px;
+    max-width: 92vw;
+    height: 560px;
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
+    background: #101018;
+    border: 1px solid #3a3a50;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px rgba(102,136,255,.15), 0 30px 70px rgba(0,0,0,.6);
+    overflow: hidden;
+}
+
+.globalchat-header {
+    flex: 0 0 auto;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 18px;
+    background: #181822;
+    border-bottom: 2px solid rgba(102,136,255,.6);
+}
+.globalchat-icon { font-size: 18px; }
+.globalchat-title {
+    font-family: Impact, sans-serif;
+    font-size: 16px;
+    color: #c5cdff;
+    letter-spacing: 1px;
+    margin-right: 10px;
+}
+.globalchat-presence-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #44ff88;
+    animation: globalchatPulse 1.6s ease-in-out infinite;
+}
+@keyframes globalchatPulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+.globalchat-presence-text {
+    font-size: 11px;
+    font-weight: bold;
+    color: #8ba0c9;
+    flex: 1 1 auto;
+}
+#globalchat-close {
+    border: none;
+    background: #1e1e2a;
+    color: #9090a8;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+}
+#globalchat-close:hover { background: #3a3a4e; color: #fff; }
+
+#globalchat-log {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.globalchat-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    position: relative;
+}
+.globalchat-row.mine { flex-direction: row-reverse; text-align: right; }
+.globalchat-row.stacked { margin-top: -4px; }
+.globalchat-row.stacked:not(.mine) { padding-left: 38px; }
+.globalchat-row.stacked.mine { padding-right: 38px; }
+
+.globalchat-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    display: grid; place-items: center;
+    font-family: Impact, sans-serif;
+    font-size: 12px;
+    color: #101018;
+}
+
+.globalchat-bubble-col {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+}
+.globalchat-row.mine .globalchat-bubble-col { align-items: flex-end; }
+
+.globalchat-name {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.globalchat-bubble {
+    border: none;
+    text-align: left;
+    background: #181f2e;
+    color: #f2f2f6;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    word-wrap: break-word;
+}
+.globalchat-row.mine .globalchat-bubble { background: #33261a; text-align: right; }
+.globalchat-bubble:hover { filter: brightness(1.15); }
+
+.globalchat-reactions {
+    display: flex;
+    gap: 6px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+.globalchat-row.mine .globalchat-reactions { justify-content: flex-end; }
+.globalchat-reaction-chip {
+    border: none;
+    background: #20202e;
+    color: #c8c8d8;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.globalchat-reaction-chip.mine { background: #8ab4ff; color: #101018; }
+
+.globalchat-picker {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    background: #1a1a28;
+    border: 1px solid #6688ff;
+    border-radius: 20px;
+    padding: 5px 8px;
+    width: fit-content;
+}
+.globalchat-picker[hidden] { display: none; }
+.globalchat-picker-emoji {
+    border: none;
+    background: transparent;
+    font-size: 17px;
+    cursor: pointer;
+    transition: transform .12s;
+}
+.globalchat-picker-emoji:hover { transform: scale(1.3); }
+
+.globalchat-inputrow {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 10px;
+    padding: 14px 18px;
+    border-top: 1px solid rgba(102,136,255,.18);
+    background: #14141c;
+}
+#globalchat-input {
+    flex: 1 1 auto;
+    background: #181822;
+    border: 1px solid #33334a;
+    border-radius: 20px;
+    padding: 10px 16px;
+    color: #f0f0f0;
+    font-size: 14px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+#globalchat-input:focus { border-color: #6688ff; }
+#globalchat-input::placeholder { color: #4a4a5e; }
+#globalchat-send {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #4d6bff;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+#globalchat-send:hover { background: #5c78ff; }
+
+/* ---------- Toast notifications (friend requests / DMs) ---------- */
+/* Independent of the panel's visibility — these show up regardless of
+   which screen the player is on, so they sit above everything. */
+
+#chat-toast-stack {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1300;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.chat-toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 340px;
+    padding: 12px 16px;
+    background: #14141c;
+    border: 2px solid var(--accent, #76d7ff);
+    border-left-width: 5px;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    font-family: Arial, sans-serif;
+    transform: translateX(360px);
+    opacity: 0;
+    transition: transform .28s cubic-bezier(.2,.9,.3,1.2), opacity .28s;
+}
+.chat-toast.visible { transform: translateX(0); opacity: 1; }
+.chat-toast.leaving { transform: translateX(360px); opacity: 0; }
+
+.chat-toast-icon { font-size: 18px; }
+.chat-toast-text {
+    font-size: 13px;
+    font-weight: bold;
+    color: #e8e8f0;
+}
+
+/* ============================================================
+   DIRECT MESSAGES — full-screen overlay for 1:1 friend chat,
+   same lifecycle pattern as Profile/Friends/Shop.
+   ============================================================ */
+
+#dm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: #08080a;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .15s;
+}
+#dm-overlay.visible { display: flex; opacity: 1; }
+
+.dm-header {
+    flex: 0 0 auto;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    background: #101014;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+#dm-back {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+#dm-back:hover { color: #8ab4ff; }
+.dm-title {
+    flex: 1 1 auto;
+    text-align: center;
+    font-family: Impact, sans-serif;
+    font-size: 26px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+.dm-header-spacer { width: 70px; flex: 0 0 auto; }
+
+#dm-log {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 24px 12%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+@media (max-width: 900px) {
+    #dm-log { padding: 24px 4%; }
+}
+
+.dm-row { max-width: 60%; }
+.dm-row.mine { align-self: flex-end; text-align: right; }
+.dm-from { font-size: 11px; font-weight: bold; margin-bottom: 3px; }
+.dm-bubble {
+    display: inline-block;
+    background: #181f2e;
+    color: #f2f2f6;
+    font-size: 14px;
+    padding: 9px 13px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    text-align: left;
+}
+.dm-row.mine .dm-bubble { background: #33261a; }
+
+#dm-status {
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 0;
+}
+.dm-status-ok { color: #8ba0c9; }
+.dm-status-error { color: #ff7b7b; }
+
+.dm-inputrow {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 12px;
+    padding: 16px 12%;
+    background: #101014;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+@media (max-width: 900px) {
+    .dm-inputrow { padding: 16px 4%; }
+}
+#dm-input {
+    flex: 1 1 auto;
+    background: #181822;
+    border: 1px solid #33334a;
+    border-radius: 20px;
+    padding: 11px 18px;
+    color: #f0f0f0;
+    font-size: 15px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+#dm-input:focus { border-color: #8cff9b; }
+#dm-input::placeholder { color: #4a4a5e; }
+#dm-send {
+    border: 2px solid #8cff9b;
+    background: #224a2a;
+    color: #8cff9b;
+    border-radius: 20px;
+    padding: 0 22px;
+    font-family: Impact, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+#dm-send:hover { background: #2f6b3a; }
+
+/* ============================================================
+   ONLINE CO-OP / TDM LOBBY — full background art with a header and
+   a swappable content area (menu → joining → room).
+   ============================================================ */
+
+#lobby-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity .25s;
+}
+#lobby-overlay.visible { opacity: 1; }
+#lobby-overlay.fading { opacity: 0; }
+#lobby-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(5,6,12,.55) 0%, rgba(5,6,12,.25) 35%, rgba(4,5,10,.7) 100%);
+    pointer-events: none;
+}
+#lobby-overlay > * { position: relative; z-index: 1; }
+
+.lobby-header {
+    flex: 0 0 auto;
+    position: relative;
+    padding: 22px 0 6px;
+    text-align: center;
+}
+
+.lobby-back-btn {
+    position: absolute;
+    left: 26px;
+    top: 20px;
+    border: 2px solid #fff;
+    background: rgba(6,8,14,.75);
+    color: #fff;
+    font-family: Impact, sans-serif;
+    font-size: 16px;
+    letter-spacing: .5px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+.lobby-back-btn:hover { background: rgba(30,34,48,.9); border-color: #ffcc00; }
+
+.lobby-title {
+    font-family: Impact, sans-serif;
+    font-size: 44px;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 10px rgba(0,0,0,.7);
+}
+.lobby-title-1 { color: #ffffff; }
+.lobby-title-2 { color: #ff3b3b; }
+.lobby-subtitle {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #dfe6f5;
+}
+
+#lobby-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 10px 20px 40px;
+}
+
+.lobby-status {
+    font-size: 14px;
+    font-weight: bold;
+    color: #cfe3ff;
+    min-height: 18px;
+}
+.lobby-status.error { color: #ff7b7b; }
+
+.lobby-offline {
+    text-align: center;
+    max-width: 520px;
+}
+.lobby-offline p {
+    margin-top: 14px;
+    color: #b9c6dd;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ---- Menu: Host / Join cards ---- */
+
+.lobby-cards {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.lobby-card {
+    width: 420px;
+    aspect-ratio: 1567 / 1004;
+    max-width: 42vw;
+    border: none;
+    border-radius: 14px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    transition: transform .18s, box-shadow .18s;
+}
+.lobby-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 26px 60px rgba(0,0,0,.6); }
+@media (max-width: 900px) {
+    .lobby-card { max-width: 90vw; }
+    .lobby-cards { flex-direction: column; }
+}
+
+.lobby-info-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(6,10,20,.72);
+    border: 1px solid rgba(255,204,0,.35);
+    border-radius: 24px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffcc00;
+    backdrop-filter: blur(6px);
+}
+.lobby-info-pill b { color: #fff; }
+.lobby-info-pill-sub {
+    border-color: rgba(255,255,255,.15);
+    color: #9fb3d1;
+    font-size: 12px;
+    font-weight: normal;
+}
+.lobby-info-pill-sub code {
+    background: rgba(255,255,255,.1);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #fff;
+}
+.lobby-info-diamond { color: #ff3b3b; font-size: 10px; }
+.lobby-info-icon { font-size: 15px; }
+
+.lobby-status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+.lobby-status-diamond { color: rgba(255,255,255,.4); font-size: 11px; }
+.lobby-status-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #4be07c;
+    box-shadow: 0 0 8px #4be07c;
+    animation: lobbyDotPulse 1.6s ease-in-out infinite;
+}
+@keyframes lobbyDotPulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* ---- Joining: room code entry ---- */
+
+.lobby-join {
+    background: rgba(8,10,18,.72);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 16px;
+    padding: 36px 46px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+}
+.lobby-join-title {
+    font-family: Impact, sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-bottom: 22px;
+}
+.lobby-code-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+}
+.lobby-code-box {
+    width: 62px; height: 74px;
+    background: rgba(20,20,28,.9);
+    border: 2px solid #555566;
+    border-radius: 8px;
+    color: #ffcc00;
+    font-family: Impact, sans-serif;
+    font-size: 38px;
+    text-align: center;
+    outline: none;
+    text-transform: uppercase;
+}
+.lobby-code-box:focus { border-color: #ffcc00; box-shadow: 0 0 14px rgba(255,204,0,.4); }
+.lobby-join-hint {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #9fb3d1;
+    font-weight: bold;
+}
+.lobby-join-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.lobby-btn {
+    font-family: Impact, sans-serif;
+    font-size: 18px;
+    letter-spacing: .5px;
+    border-radius: 24px;
+    padding: 12px 30px;
+    cursor: pointer;
+    transition: .2s;
+}
+.lobby-btn-cancel { border: 2px solid #ff7b7b; background: rgba(58,32,32,.7); color: #ff7b7b; }
+.lobby-btn-cancel:hover { background: #4a2626; }
+.lobby-btn-join { border: 2px solid #76d7ff; background: rgba(20,45,60,.7); color: #76d7ff; }
+.lobby-btn-join:hover { background: #1d4d63; }
+
+/* ---- Room: waiting room ---- */
+
+.lobby-room {
+    text-align: center;
+}
+.lobby-room-code-label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #9fb3d1;
+    letter-spacing: 1px;
+}
+.lobby-room-code {
+    font-family: Impact, sans-serif;
+    font-size: 64px;
+    color: #ffcc00;
+    text-shadow: 0 3px 10px rgba(0,0,0,.7);
+    margin: 4px 0 26px;
+    letter-spacing: 4px;
+}
+.lobby-slots {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.lobby-slot {
+    width: 260px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(8,10,18,.72);
+    border: 2px solid #444455;
+    backdrop-filter: blur(6px);
+}
+.lobby-slot.empty { border-color: #444455; opacity: .7; }
+.lobby-slot.host { border-color: #ffcc00; }
+.lobby-slot.ready { border-color: #8cff9b; }
+.lobby-slot.notready { border-color: #666677; }
+.lobby-slot-name {
+    font-family: Impact, sans-serif;
+    font-size: 22px;
+    color: #fff;
+}
+.lobby-slot.empty .lobby-slot-name { color: #666677; }
+.lobby-slot-role {
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #9fb3d1;
+}
+.lobby-slot.host .lobby-slot-role { color: #ffcc00; }
+.lobby-slot.ready .lobby-slot-role { color: #8cff9b; }
+
+.lobby-btn-action {
+    display: block;
+    margin: 0 auto 14px;
+    border: 2px solid #8cff9b;
+    background: rgba(20,45,32,.75);
+    color: #8cff9b;
+    min-width: 260px;
+}
+.lobby-btn-action:hover:not(.disabled) { background: #234f34; }
+.lobby-btn-action.disabled { border-color: #555566; color: #777788; cursor: not-allowed; }
+.lobby-btn-action.is-ready { border-color: #ffcc00; color: #ffcc00; background: rgba(60,50,10,.75); }
+
+.lobby-btn-leave {
+    display: block;
+    margin: 0 auto;
+    border: 2px solid #ff7b7b;
+    background: rgba(58,32,32,.7);
+    color: #ff7b7b;
+    min-width: 260px;
+}
+.lobby-btn-leave:hover { background: #4a2626; }
+
+/* ============================================================
+   MAIN MENU — sits on top of the existing video background; the
+   overlay itself is click-through except for the panel, so the
+   animated video underneath is never blocked or dimmed further.
+   ============================================================ */
+
+/* Full-screen warm color wash that sits directly on top of the raw
+   game canvas (below the menu panel) so the whole video — not just a
+   dark rectangle — reads brighter and "lit" in the red/gold ninja
+   palette. mix-blend-mode:screen only ever brightens, never darkens,
+   so it can't wash the footage out. Main Menu only — untouched. */
+#menu-ambient-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity .6s;
+    background:
+        radial-gradient(ellipse 60% 55% at 82% 18%, rgba(255,70,70,.35), transparent 65%),
+        radial-gradient(ellipse 55% 60% at 8% 88%, rgba(255,196,84,.22), transparent 70%);
+    animation: menuAmbientBreathe 7s ease-in-out infinite;
+}
+#menu-ambient-glow.visible { opacity: 1; }
+@keyframes menuAmbientBreathe {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.35); }
+}
+
+/* ============================================================
+   RESULT-SCREEN LIVING BACKGROUND — Game Over / Leaderboard.
+   Several real, blurred (filter: blur, same trick as the login
+   box's glow) color orbs drifting slowly behind the content, each
+   tinted per-screen (victory green / defeat red / leaderboard gold)
+   via the --c custom property set from JS. This is deliberately
+   built with actual CSS blur + animation rather than a flat canvas
+   gradient, since that flat look wasn't reading as "eye catchy"
+   enough. mix-blend-mode:screen keeps it additive-only so it can
+   never darken or muddy the content sitting on top of it.
+   ============================================================ */
+.ambient-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .8s;
+}
+.ambient-glow.visible { opacity: 1; }
+
+.ambient-glow-orb {
+    position: absolute;
+    top: 0; left: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(70px);
+    mix-blend-mode: screen;
+    background: radial-gradient(circle, var(--c, rgba(255,196,84,.5)), transparent 70%);
+    animation-name: ambientOrbDrift;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+@keyframes ambientOrbDrift {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    50%  { transform: translate(calc(-50% + 6vw), calc(-50% - 5vh)) scale(1.18); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+#menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 6%;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .35s;
+}
+#menu-overlay.visible { opacity: 1; }
+
+/* No solid card anymore — just a loose column. A soft directional
+   fade (::before) keeps the button labels readable without boxing in
+   or dimming the rest of the background video. */
+.menu-panel {
+    position: relative;
+    pointer-events: auto;
+    width: 300px;
+    max-width: 82vw;
+    padding: 0;
+}
+.menu-panel::before {
+    content: '';
+    position: absolute;
+    inset: -50px -70px -50px -260px;
+    background: linear-gradient(to left, rgba(4,4,7,.5) 0%, rgba(4,4,7,.24) 45%, transparent 85%);
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 28px;
+}
+
+/* Soft blurred lantern-light blobs floating behind the column, for
+   depth and to sell the "glow" without adding a hard shape. */
+.menu-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(38px);
+    pointer-events: none;
+    z-index: -2;
+    animation: menuGlowBreathe 6s ease-in-out infinite;
+}
+.menu-glow-a {
+    width: 220px; height: 220px;
+    top: -70px; right: -40px;
+    background: radial-gradient(circle, rgba(255,59,59,.45), transparent 70%);
+}
+.menu-glow-b {
+    width: 260px; height: 260px;
+    bottom: -110px; right: 30px;
+    background: radial-gradient(circle, rgba(255,196,84,.3), transparent 70%);
+    animation-delay: 2.4s;
+}
+@keyframes menuGlowBreathe {
+    0%, 100% { opacity: .55; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+}
+
+.menu-title {
+    text-align: right;
+    font-family: Impact, sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 18px rgba(255,59,59,.55), 0 3px 10px rgba(0,0,0,.8);
+}
+.menu-title-torii { color: #ff3b3b; margin-right: 6px; filter: drop-shadow(0 0 8px rgba(255,59,59,.8)); }
+.menu-title-1 { color: #fff; }
+.menu-title-2 { color: #ff3b3b; margin-left: 8px; }
+
+.menu-title-underline {
+    height: 2px;
+    width: 100%;
+    margin-bottom: 20px;
+    background: linear-gradient(to left, #ff3b3b, rgba(255,59,59,0));
+    box-shadow: 0 0 10px 1px rgba(255,59,59,.7);
+    animation: menuUnderlinePulse 2.6s ease-in-out infinite;
+}
+@keyframes menuUnderlinePulse {
+    0%, 100% { opacity: .6; }
+    50%      { opacity: 1; }
+}
+
+.menu-btn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Idle button shape — a beveled HUD panel rather than a flat glass
+   strip: a layered gradient reads as a slight metal/glass bevel, a
+   hairline top highlight plus a darker inset base give it depth even
+   before hovering, and a small corner "tag" in the button's own
+   accent color (dim at rest, lit on hover) sits in the clipped
+   corner so each action has a quiet identity mark at a glance. The
+   hover sweep/underline below (::before/::after/:hover/:active) are
+   unchanged — only this resting look is new. */
+.menu-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,.14);
+    background:
+        linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 14%),
+        linear-gradient(135deg, rgba(24,24,30,.6), rgba(7,7,10,.62));
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+    padding: 14px 22px 14px 28px;
+    cursor: pointer;
+    text-align: left;
+    transform: translateX(28px);
+    opacity: 0;
+    transition: transform .15s, opacity .3s, border-color .2s, background .2s;
+    transition-delay: 0s, 0s, 0s, 0s;
+}
+
+/* Corner tag — a small triangular chip filling the same clipped
+   corner as the button itself, tinted with the button's own accent.
+   Dim at rest so it reads as a marking rather than a highlight;
+   fully lit together with the hover sweep. */
+.menu-btn-tag {
+    position: absolute;
+    top: 0; left: 0;
+    width: 16px; height: 16px;
+    background: var(--accent, #8cff9b);
+    opacity: .5;
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    transition: opacity .2s;
+    pointer-events: none;
+}
+.menu-btn:hover .menu-btn-tag { opacity: 1; }
+.menu-btn-list.enter .menu-btn {
+    transform: translateX(0);
+    opacity: 1;
+    /* Only the entrance (transform/opacity) is staggered per item —
+       everything else stays instant so hovering afterwards never feels
+       delayed. */
+    transition-delay: 0s, var(--delay), 0s, 0s;
+}
+
+/* Diagonal shine that sweeps left-to-right across the button on
+   hover — the "professional game menu" cue in place of the icon. */
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.14) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform .5s ease;
+    pointer-events: none;
+}
+.menu-btn:hover::before { transform: translateX(130%); }
+
+/* Accent underline that grows outward from the center rather than a
+   static left-side bar, so the color reads as a reaction to the
+   hover, not a permanent stripe. */
+.menu-btn::after {
+    content: '';
+    position: absolute;
+    left: 50%; right: 50%; bottom: 0;
+    height: 2px;
+    background: var(--accent, #8cff9b);
+    box-shadow: 0 0 10px 1px var(--glow, transparent);
+    transition: left .22s ease, right .22s ease;
+}
+.menu-btn:hover::after { left: 0; right: 0; }
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, rgba(28,28,35,.72), rgba(12,12,16,.72));
+    border-color: var(--accent, rgba(255,255,255,.35));
+    transform: translateX(-4px) scale(1.015);
+}
+.menu-btn:active { transform: translateX(-4px) scale(0.985); }
+.menu-btn:hover .menu-btn-label { color: var(--accent, #8cff9b); text-shadow: 0 0 12px var(--glow, transparent); }
+
+.menu-btn-label {
+    font-family: Impact, sans-serif;
+    font-size: 17px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #e8e8e8;
+    transition: color .15s, text-shadow .15s;
+    flex: 1 1 auto;
+}
+
+.menu-btn-badge {
+    position: absolute;
+    top: -6px; right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: #e63946;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(230,57,70,.8);
+}
+.menu-btn-badge.visible { display: flex; }
+
+.menu-toast {
+    margin-top: 14px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffd166;
+    text-shadow: 0 0 10px rgba(255,209,102,.6);
+    opacity: 0;
+    min-height: 18px;
+}
+@keyframes menuToastPop {
+    0%   { opacity: 0; transform: translateY(4px); }
+    12%  { opacity: 1; transform: translateY(0); }
+    82%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+.menu-toast.visible { animation: menuToastPop 2.6s ease forwards; }
+
+/* ============================================================
+   OPTIONS — a centered modal launched on top of a paused MenuScene.
+   Same dark-glass/Impact/torii language as the rest of the menus, but
+   centered and dimmed like a real dialog since it's a modal, not a
+   persistent panel.
+   ============================================================ */
+
+#option-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(2px);
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .3s;
+}
+#option-overlay.visible { opacity: 1; }
+
+.option-panel {
+    position: relative;
+    width: 420px;
+    max-width: 88vw;
+    background: linear-gradient(160deg, rgba(12,12,16,.9), rgba(6,6,10,.95));
+    border: 1px solid rgba(255,59,59,.3);
+    border-radius: 18px;
+    padding: 30px 32px 26px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;
+    transform: scale(.92) translateY(10px);
+    transition: transform .3s;
+}
+#option-overlay.visible .option-panel { transform: scale(1) translateY(0); }
+
+.option-glow {
+    position: absolute;
+    inset: -40px;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(40px);
+    background: radial-gradient(circle at 30% 0%, rgba(255,59,59,.25), transparent 60%);
+}
+
+.option-title {
+    text-align: center;
+    font-family: Impact, sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 0 0 16px rgba(255,59,59,.5), 0 3px 10px rgba(0,0,0,.8);
+}
+.option-title-torii { color: #ff3b3b; margin-right: 8px; filter: drop-shadow(0 0 8px rgba(255,59,59,.8)); }
+
+.option-title-underline {
+    height: 2px;
+    width: 70%;
+    margin: 10px auto 26px;
+    background: linear-gradient(to right, transparent, #ff3b3b, transparent);
+    box-shadow: 0 0 10px 1px rgba(255,59,59,.6);
+}
+
+.option-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.option-row-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.option-row-icon { font-size: 16px; flex: 0 0 auto; }
+.option-row-label {
+    font-family: Impact, sans-serif;
+    font-size: 15px;
+    letter-spacing: .5px;
+    color: #ddd;
+    flex: 1 1 auto;
+}
+.option-row-value {
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Custom range slider — colored fill up to the thumb via a
+   background gradient driven by the --fill custom property, which JS
+   updates on every 'input' event. */
+.option-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(to right,
+        var(--accent, #ff3b3b) 0%, var(--accent, #ff3b3b) var(--fill, 50%),
+        rgba(255,255,255,.12) var(--fill, 50%), rgba(255,255,255,.12) 100%);
+    box-shadow: 0 0 10px 0 var(--glow, rgba(255,59,59,.55));
+}
+.option-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--accent, #ff3b3b);
+    box-shadow: 0 0 12px 1px var(--accent, #ff3b3b);
+    cursor: pointer;
+    transition: transform .12s;
+}
+.option-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.option-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--accent, #ff3b3b);
+    box-shadow: 0 0 12px 1px var(--accent, #ff3b3b);
+    cursor: pointer;
+}
+.option-slider::-moz-range-track {
+    height: 8px;
+    border-radius: 5px;
+    background: transparent;
+}
+
+.option-back {
+    width: 100%;
+    border: 1px solid rgba(255,123,123,.35);
+    background: rgba(255,123,123,.08);
+    color: #ff7b7b;
+    font-family: Impact, sans-serif;
+    font-size: 16px;
+    letter-spacing: .5px;
+    border-radius: 10px;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: background .15s, box-shadow .15s;
+}
+.option-back:hover {
+    background: rgba(255,123,123,.18);
+    box-shadow: 0 0 18px rgba(255,123,123,.3);
+}
+.option-back span { margin-right: 4px; }
+
+/* ============================================================
+   PAUSE MENU — same centered dark-glass modal shell as Options,
+   reusing the Main Menu's title/underline/button-list classes so all
+   three share one visual system without duplicating their CSS.
+   ============================================================ */
+
+#pause-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.65);
+    backdrop-filter: blur(2px);
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .3s;
+}
+#pause-overlay.visible { opacity: 1; }
+
+.pause-panel {
+    position: relative;
+    width: 340px;
+    max-width: 86vw;
+    background: linear-gradient(160deg, rgba(12,12,16,.9), rgba(6,6,10,.95));
+    border: 1px solid rgba(255,59,59,.3);
+    border-radius: 18px;
+    padding: 30px 28px 26px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.03) inset;
+    transform: scale(.92) translateY(10px);
+    transition: transform .3s;
+}
+#pause-overlay.visible .pause-panel { transform: scale(1) translateY(0); }
+
+.pause-panel .pause-title { justify-content: center; text-align: center; }
+.pause-panel .pause-underline { margin: 10px auto 22px; width: 70%; }
+.pause-panel .menu-btn-list { gap: 10px; }
+
+/* ============================================================
+   ARENA SELECT — the two arena backgrounds double as a crossfading
+   full-screen backdrop (default: Arena 1 dim) and as the card art
+   itself, so hovering a card visibly "lights up" that arena behind
+   everything else, same idea as the original Phaser version.
+   ============================================================ */
+
+#mapselect-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 850;
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .3s;
+    background: #0a0a0d;
+}
+#mapselect-overlay.visible { opacity: 1; }
+
+.mapselect-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: .22;
+    transition: opacity .5s;
+}
+#mapselect-bg-b { opacity: 0; }
+#mapselect-overlay.hover-arena1 #mapselect-bg-a { opacity: .45; }
+#mapselect-overlay.hover-arena1 #mapselect-bg-b { opacity: 0; }
+#mapselect-overlay.hover-arena2 #mapselect-bg-b { opacity: .45; }
+#mapselect-overlay.hover-arena2 #mapselect-bg-a { opacity: 0; }
+
+.mapselect-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.55) 100%);
+    pointer-events: none;
+}
+
+.mapselect-header {
+    position: relative;
+    z-index: 2;
+    height: 84px;
+    display: flex;
+    align-items: center;
+    padding: 0 34px;
+}
+#mapselect-back {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color .15s;
+}
+#mapselect-back:hover { color: #ffcc00; }
+.mapselect-title {
+    flex: 1 1 auto;
+    text-align: center;
+    font-family: Impact, sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 0 0 16px rgba(255,59,59,.5), 0 3px 10px rgba(0,0,0,.8);
+}
+.mapselect-title-torii { color: #ff3b3b; margin-right: 6px; filter: drop-shadow(0 0 8px rgba(255,59,59,.8)); }
+.mapselect-header-spacer { width: 70px; flex: 0 0 auto; }
+
+.mapselect-grid {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    height: calc(100% - 84px);
+}
+
+.mapselect-card {
+    position: relative;
+    width: 340px;
+    height: 200px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 16px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.mapselect-card:hover {
+    transform: scale(1.05) translateY(-4px);
+    border-color: rgba(255,255,255,.4);
+    box-shadow: 0 26px 60px rgba(0,0,0,.6), 0 0 30px rgba(255,255,255,.15);
+}
+.mapselect-card-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%);
+}
+.mapselect-card-label {
+    position: absolute;
+    left: 0; right: 0; bottom: 16px;
+    text-align: center;
+    font-family: Impact, sans-serif;
+    font-size: 26px;
+    letter-spacing: .5px;
+    text-shadow: 0 3px 8px rgba(0,0,0,.9);
+}
+
+/* ============================================================
+   MATCH REPLAY — chrome only (title bar + footer); the middle stays
+   fully transparent/click-through so the Phaser-rendered ghost
+   sprites underneath are unobstructed and still play on the canvas.
+   ============================================================ */
+
+#replay-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 850;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    opacity: 0;
+    transition: opacity .3s;
+}
+#replay-overlay.visible { opacity: 1; }
+
+.replay-header {
+    pointer-events: auto;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    background: linear-gradient(to bottom, rgba(6,6,9,.85), transparent);
+}
+#replay-back {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color .15s;
+}
+#replay-back:hover { color: #ffcc44; }
+.replay-title {
+    flex: 1 1 auto;
+    text-align: center;
+    font-family: Impact, sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: #ffcc44;
+    text-shadow: 0 0 14px rgba(255,204,68,.5), 0 3px 8px rgba(0,0,0,.9);
+}
+.replay-header-spacer { width: 70px; flex: 0 0 auto; }
+
+.replay-footer {
+    pointer-events: auto;
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 18px 0 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(to top, rgba(6,6,9,.85), transparent);
+}
+.replay-status {
+    font-size: 13px;
+    color: #999;
+    min-height: 16px;
+}
+.replay-again {
+    border: 1px solid rgba(118,215,255,.35);
+    background: rgba(118,215,255,.08);
+    color: #76d7ff;
+    font-family: Impact, sans-serif;
+    font-size: 15px;
+    letter-spacing: .5px;
+    border-radius: 9px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: background .15s, box-shadow .15s;
+}
+.replay-again:hover {
+    background: rgba(118,215,255,.18);
+    box-shadow: 0 0 16px rgba(118,215,255,.3);
+}
+
+/* ============================================================
+   CROSS-SCREEN BUTTON CONSISTENCY — Friends, Profile, Shop and
+   Lobby each had their own hover language (some just swapped a flat
+   color, some did nothing at all). This brings every one of them
+   onto the same interaction feel as the Main Menu buttons — a
+   diagonal shine sweep, a slight lift, and a touch of brightness on
+   hover — without touching any of their own colors or shapes, so
+   Friends' green "add" stays green, Shop's tab pill stays a pill,
+   and so on. Only the *feel* of hovering is unified.
+   ============================================================ */
+.friend-action-btn,
+#profile-overlay .profile-actions button,
+#profile-overlay .settings-save-btn,
+#shop-overlay .shop-back-arrow,
+#shop-overlay .shop-back-pill,
+#shop-overlay .shop-tab,
+.fighter-buy-btn,
+.supply-buy-btn,
+.supply-sell-btn,
+.shop-confirm-actions button,
+.lobby-back-btn,
+.lobby-btn,
+.lobby-btn-action,
+.lobby-btn-leave {
+    position: relative;
+    transition: transform .15s, filter .15s, background .15s, background-color .15s, border-color .15s, box-shadow .15s, color .15s;
+}
+.friend-action-btn::before,
+#profile-overlay .profile-actions button::before,
+#profile-overlay .settings-save-btn::before,
+#shop-overlay .shop-back-arrow::before,
+#shop-overlay .shop-back-pill::before,
+#shop-overlay .shop-tab::before,
+.fighter-buy-btn::before,
+.supply-buy-btn::before,
+.supply-sell-btn::before,
+.shop-confirm-actions button::before,
+.lobby-back-btn::before,
+.lobby-btn::before,
+.lobby-btn-action::before,
+.lobby-btn-leave::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform .5s ease;
+    pointer-events: none;
+}
+.friend-action-btn:hover:not(:disabled)::before,
+#profile-overlay .profile-actions button:hover:not(:disabled)::before,
+#profile-overlay .settings-save-btn:hover:not(:disabled)::before,
+#shop-overlay .shop-back-arrow:hover::before,
+#shop-overlay .shop-back-pill:hover::before,
+#shop-overlay .shop-tab:hover::before,
+.fighter-buy-btn:hover:not(:disabled)::before,
+.supply-buy-btn:hover:not(:disabled)::before,
+.supply-sell-btn:hover:not(:disabled)::before,
+.shop-confirm-actions button:hover::before,
+.lobby-back-btn:hover::before,
+.lobby-btn:hover::before,
+.lobby-btn-action:hover:not(.disabled)::before,
+.lobby-btn-leave:hover::before {
+    transform: translateX(130%);
+}
+.friend-action-btn:hover:not(:disabled),
+#profile-overlay .profile-actions button:hover:not(:disabled),
+#profile-overlay .settings-save-btn:hover:not(:disabled),
+#shop-overlay .shop-back-arrow:hover,
+#shop-overlay .shop-back-pill:hover,
+#shop-overlay .shop-tab:hover,
+.fighter-buy-btn:hover:not(:disabled),
+.supply-buy-btn:hover:not(:disabled),
+.supply-sell-btn:hover:not(:disabled),
+.shop-confirm-actions button:hover,
+.lobby-back-btn:hover,
+.lobby-btn:hover,
+.lobby-btn-action:hover:not(.disabled),
+.lobby-btn-leave:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+.friend-action-btn:active:not(:disabled),
+#profile-overlay .profile-actions button:active:not(:disabled),
+#profile-overlay .settings-save-btn:active:not(:disabled),
+#shop-overlay .shop-back-arrow:active,
+#shop-overlay .shop-back-pill:active,
+#shop-overlay .shop-tab:active,
+.fighter-buy-btn:active:not(:disabled),
+.supply-buy-btn:active:not(:disabled),
+.supply-sell-btn:active:not(:disabled),
+.shop-confirm-actions button:active,
+.lobby-back-btn:active,
+.lobby-btn:active,
+.lobby-btn-action:active:not(.disabled),
+.lobby-btn-leave:active {
+    transform: translateY(0);
+    filter: brightness(1);
+}
